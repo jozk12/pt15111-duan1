@@ -12,6 +12,9 @@ $checkin = trim($_POST['checkin']);
 $checkout = trim($_POST['checkout']);
 $diff = strtotime($checkout)-strtotime($checkin);
 $total_date = round($diff/(60*60*24));
+$today = date("m/d/Y");
+$diff_today = strtotime($checkin)-strtotime($today);
+$total_today = round($diff_today/(60*60*24));
 $_SESSION[BOOK]=$room;
 $_SESSION[BOOK]['checkin']=$checkin;
 $_SESSION[BOOK]['checkout']=$checkout;
@@ -25,6 +28,9 @@ if(strlen($checkin)==0){
 }
 if($checkinerr==""&&$total_date<=0){
     $checkinerr = "Yêu cầu nhập ngày đến nhỏ hơn ngày rời";
+}
+if($checkinerr==""&&$total_today<0){
+    $checkinerr = "Yêu cầu nhập ngày đến lớn hơn hoặc bằng hiện tại";
 }
 if(strlen($checkout)==0){
     $checkouterr="Yêu cầu nhập ngày rời đi";

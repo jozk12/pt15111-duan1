@@ -13,5 +13,6 @@ if(!$blog){
 }
 $removeBlog = "delete from blog where id = $id";
 queryExecute($removeBlog, false);
-header("location: ".ADMIN_URL."blog?msg=Xóa loại phòng thành công!")
+unlink(BASE_URL.$blog['image']);
+header("location: ".ADMIN_URL."blog?msg=Xóa loại phòng thành công!");
 ?>

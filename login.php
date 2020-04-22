@@ -65,7 +65,7 @@
 					</div>
 
 					<div class="text-center w-full p-t-80">
-						<a href="#" class="txt1">
+						<a href="<?= BASE_URL.'forgot-request.php'?>" class="txt1">
 							Quên mật khẩu?
 						</a>
 					</div>
@@ -95,7 +95,7 @@
 	<script src="<?= LOGIN_THEME_ASSET_URL ?>vendor/select2/select2.min.js"></script>
 <!--===============================================================================================-->
 	<script src="<?= LOGIN_THEME_ASSET_URL ?>js/main.js"></script>
-	<?php include_once './_share/msg_warn.php' ?>
+	<?php include_once './_share/msg_succ.php' ?>
 
 </body>
 </html>

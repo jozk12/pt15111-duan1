@@ -117,7 +117,7 @@ require_once "./config/utils.php";
                     </div>
 
                     <div class="text-center w-full p-t-80">
-                        <a href="#" class="txt1">
+                        <a href="<?= BASE_URL.'forgot-request.php'?>" class="txt1">
                             Quên mật khẩu?
                         </a>
                     </div>

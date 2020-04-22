@@ -40,7 +40,24 @@ for ($i = 0; $i < count($blogs); $i++) {
     $cates = queryExecute($getCateQuery, true);
     $blogs[$i]['blog_cate'] = $cates;
 }
+if (isset($_GET['page'])) {
+    $page = $_GET['page'];
+} else {
+    $page = 1;
+}
+$no_of_records_per_page = 10;
+$offset = ($page-1) * $no_of_records_per_page;
 
+$total_pages_sql = "SELECT * FROM blog";
+$total_rows = queryExecute($total_pages_sql, true);
+$total_rows = count($total_rows);
+$total_pages = round($total_rows / $no_of_records_per_page);
+
+$sql = "SELECT * FROM table LIMIT $no_of_records_per_page";
+$res_data = queryExecute($sql, true);
+foreach ($res_data as $res){
+    echo $res;
+}
 ?>
 
 <!DOCTYPE html>
@@ -92,14 +109,18 @@ for ($i = 0; $i < count($blogs); $i++) {
                         </div>
                         <!-- Blog List End -->
                         <!-- Pager -->
-                        <!-- <div class="widget-pager">
-                                <ul>
-                                    <li><a href="#">1</a></li>
-                                    <li class="active"><a href="#">2</a></li>
-                                    <li><a href="#">3</a></li>
-                                    <li><a href="#">4</a></li>
-                                </ul>
-                            </div> -->
+                        <div class="widget-pager">
+                            <ul class="pagination">
+                                <li><a href="?pageno=1">First</a></li>
+                                <li class="<?php if($page <= 1){ echo 'disabled'; } ?>">
+                                    <a href="<?php if($page <= 1){ echo '#'; } else { echo "?pageno=".($page - 1); } ?>">Prev</a>
+                                </li>
+                                <li class="<?php if($page >= $total_pages){ echo 'disabled'; } ?>">
+                                    <a href="<?php if($page >= $total_pages){ echo '#'; } else { echo "?pageno=".($page + 1); } ?>">Next</a>
+                                </li>
+                                <li><a href="?page=<?php echo $total_pages; ?>">Last</a></li>
+                            </ul>
+                            </div>
                         <!-- Pager End -->
                     </div>
                     <div class="col-md-3">
