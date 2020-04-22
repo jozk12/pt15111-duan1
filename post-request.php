@@ -14,11 +14,6 @@ $emails = queryExecute($getEmails, true);
 if($emailerr==""&&count($emails)==0){
     $emailerr = "Không có tài khoản nào sử dụng email này";
 }
-$getEmailsF = "select * from forgot_password where email='$email'";
-$emailsF = queryExecute($getEmailsF, true);
-if($emailerr==""&&count($emailsF)>0){
-    $emailerr = "Chúng tôi đã gửi link cho bạn rồi";
-}
 if($emailerr!=""){
     header('location:'.BASE_URL."forgot-request.php?emailerr=$emailerr");
     die;
