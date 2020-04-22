@@ -67,6 +67,6 @@ try {
 } catch (Exception $e) {
     echo "Message could not be sent. Mailer Error: {$mail->ErrorInfo}";
 }
-header('location: '.BASE_URL.'forgot-request.php');
+header('location: '.BASE_URL.'forgot-request.php?msg=Chúng tôi đã gửi email về cho bạn, Hãy kiểm tra email của bạn');
 die;
 ?>
