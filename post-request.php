@@ -14,11 +14,6 @@ $emails = queryExecute($getEmails, true);
 if($emailerr==""&&count($emails)==0){
     $emailerr = "Không có tài khoản nào sử dụng email này";
 }
-$getEmailsF = "select * from forgot_password where email='$email'";
-$emailsF = queryExecute($getEmailsF, true);
-if($emailerr==""&&count($emailsF)>0){
-    $emailerr = "Chúng tôi đã gửi link cho bạn rồi";
-}
 if($emailerr!=""){
     header('location:'.BASE_URL."forgot-request.php?emailerr=$emailerr");
     die;
@@ -72,6 +67,6 @@ try {
 } catch (Exception $e) {
     echo "Message could not be sent. Mailer Error: {$mail->ErrorInfo}";
 }
-header('location: '.BASE_URL.'forgot-request.php');
+header('location: '.BASE_URL.'forgot-request.php?msg=Chúng tôi đã gửi email cho bạn, Hãy kiểm tra email!');
 die;
 ?>

@@ -7,7 +7,8 @@ $email=isset($_GET['email'])?$_GET['email']:"";
 $getForgot = "select * from forgot_password where token='$token' and email = '$email'";
 $forgot = queryExecute($getForgot, false);
 if(!$forgot){
-    header('location:'.BASE_URL."reset-password.php?msg=Link không tồn tại");
+    header('location:'.BASE_URL."forgot-reset.php?msg=Link không tồn tại");
+    die;
 }
 $timezone  = 'Asia/Ho_Chi_Minh';
 date_default_timezone_set($timezone);
@@ -104,9 +105,7 @@ $total_today = $diff_today/(60*60*24);
     </body>
     </html>
 <?php else:?>
-<?= "<h1>Link của bạn đã hết hạn</h1>"?>
 <?php
-$deleteForgot = "delete from forgot_password where email='$email'";
-queryExecute($deleteForgot,false);
+header('location:'.BASE_URL."forgot-request.php?msg=Link của bạn đã hết hạn!");
 ?>
 <?php endif;?>

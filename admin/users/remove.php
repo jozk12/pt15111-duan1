@@ -17,5 +17,6 @@ if($_SESSION[AUTH]['role_id'] <= $user['role_id']){
 }
 $removeUserQuery = "delete from users where id = $id";
 queryExecute($removeUserQuery, false);
+unlink("../../".$user['avatar']);
 header("location: ".ADMIN_URL."users?msg=Xóa tài khoản thành công!")
 ?>

@@ -13,5 +13,6 @@ if(!$room){
 }
 $removeRoom = "delete from room_types where id = $id";
 queryExecute($removeRoom, false);
+unlink("../../".$room['image']);
 header("location: ".ADMIN_URL."room_types?msg=Xóa loại phòng thành công!")
 ?>

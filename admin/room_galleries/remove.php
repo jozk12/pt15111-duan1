@@ -13,5 +13,6 @@ if(!$roomGall){
 }
 $removeRoomGall = "delete from room_galleries where id = $id";
 queryExecute($removeRoomGall, false);
+unlink("../../".$roomGall['image']);
 header("location: ".ADMIN_URL."room_galleries?msg=Xóa ảnh phòng thành công!")
 ?>

@@ -13,5 +13,6 @@ if(!$web){
 }
 $removeWeb = "delete from web_settings where id = $id";
 queryExecute($removeWeb, false);
+unlink("../../".$web['logo']);
 header("location: ".ADMIN_URL."web_settings?msg=Xóa cài đặt thành công!")
 ?>

@@ -13,5 +13,6 @@ if(!$fb){
 }
 $removeFb = "delete from customer_feedback where id = $id";
 queryExecute($removeFb, false);
+unlink("../../".$fb['avatar']);
 header("location: ".ADMIN_URL."customer_feedback?msg=Xóa Phản hồi thành công!")
 ?>

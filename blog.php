@@ -7,6 +7,13 @@ $cateName = isset($_GET['cate']) ? $_GET['cate']:"";
 $getWebSettingQuery = "select * from web_settings where status = 1";
 $webSetting = queryExecute($getWebSettingQuery, false);
 
+$total_blog_one_page = 5;
+if (isset($_GET['page'])) {
+    $page = $_GET['page'];
+} else {
+    $page = 1;
+}
+$offset = ($page-1) * $total_blog_one_page;
 $getBlogQuery = "select b.*,
                 u.name author 
                 from blog b
@@ -16,9 +23,24 @@ if ($keyword !== "") {
     $getBlogQuery .= " where (b.title like '%$keyword%'
                         or u.name like '%$keyword%')  ORDER BY b.id DESC";
 } else {
-    $getBlogQuery .= " ORDER BY b.id DESC";
+    $getBlogQuery .= " ORDER BY b.id DESC 
+                        LIMIT $offset, $total_blog_one_page";
 }
 $blogs = queryExecute($getBlogQuery, true);
+for ($i = 0; $i < count($blogs); $i++) {
+    $getCateQuery = "select c.id,
+                    c.name
+                    from blog_cate_xref cxr
+                    join blog_categories c
+                    on cxr.cate_id = c.id
+                    where cxr.blog_id = " . $blogs[$i]['id'];
+    $cates = queryExecute($getCateQuery, true);
+    $blogs[$i]['blog_cate'] = $cates;
+}
+$getAllBlog = "select * from blog";
+$allBlog = queryExecute($getAllBlog, true);
+$total_rows = count($allBlog);
+$total_page = ceil($total_rows/$total_blog_one_page);
 
 $getBlogCateQuery = "select * from blog_categories where status = 1";
 $allCates = queryExecute($getBlogCateQuery, true);
@@ -30,34 +52,6 @@ $getBlogRecentQuery = "select b.*,
                 on b.author_id = u.id ORDER BY b.id DESC LIMIT 7";
 $blogRec = queryExecute($getBlogRecentQuery, true);
 
-for ($i = 0; $i < count($blogs); $i++) {
-    $getCateQuery = "select c.id,
-                    c.name
-                    from blog_cate_xref cxr
-                    join blog_categories c
-                    on cxr.cate_id = c.id
-                    where cxr.blog_id = " . $blogs[$i]['id'];
-    $cates = queryExecute($getCateQuery, true);
-    $blogs[$i]['blog_cate'] = $cates;
-}
-if (isset($_GET['page'])) {
-    $page = $_GET['page'];
-} else {
-    $page = 1;
-}
-$no_of_records_per_page = 10;
-$offset = ($page-1) * $no_of_records_per_page;
-
-$total_pages_sql = "SELECT * FROM blog";
-$total_rows = queryExecute($total_pages_sql, true);
-$total_rows = count($total_rows);
-$total_pages = round($total_rows / $no_of_records_per_page);
-
-$sql = "SELECT * FROM table LIMIT $no_of_records_per_page";
-$res_data = queryExecute($sql, true);
-foreach ($res_data as $res){
-    echo $res;
-}
 ?>
 
 <!DOCTYPE html>
@@ -110,17 +104,21 @@ foreach ($res_data as $res){
                         <!-- Blog List End -->
                         <!-- Pager -->
                         <div class="widget-pager">
-                            <ul class="pagination">
-                                <li><a href="?pageno=1">First</a></li>
-                                <li class="<?php if($page <= 1){ echo 'disabled'; } ?>">
-                                    <a href="<?php if($page <= 1){ echo '#'; } else { echo "?pageno=".($page - 1); } ?>">Prev</a>
-                                </li>
-                                <li class="<?php if($page >= $total_pages){ echo 'disabled'; } ?>">
-                                    <a href="<?php if($page >= $total_pages){ echo '#'; } else { echo "?pageno=".($page + 1); } ?>">Next</a>
-                                </li>
-                                <li><a href="?page=<?php echo $total_pages; ?>">Last</a></li>
+                            <ul <?php if ($keyword!=""):?>
+                                    style="display: none;"
+                                <?php endif;?>>
+                                <?php
+                                    for ($i=1; $i<=$total_page; $i++){
+                                        ?>
+                                            <li<?php if($page==$i):?>
+                                                class="active"
+                                                <?php endif;?>><a href="<?= BASE_URL.'blog.php?keyword='."$keyword".'&&page='."$i"?>"><?=$i?></a>
+                                            </li>
+                                        <?php
+                                    }
+                                ?>
                             </ul>
-                            </div>
+                        </div>
                         <!-- Pager End -->
                     </div>
                     <div class="col-md-3">

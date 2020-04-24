@@ -13,5 +13,6 @@ if(!$slide){
 }
 $removeSlide = "delete from slides where id = $id";
 queryExecute($removeSlide, false);
+unlink("../../".$slide['image']);
 header("location: ".ADMIN_URL."slides?msg=Xóa Slide thành công!")
 ?>

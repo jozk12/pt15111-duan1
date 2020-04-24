@@ -13,5 +13,6 @@ if(!$gallery){
 }
 $removeGallery = "delete from galleries where id = $id";
 queryExecute($removeGallery, false);
+unlink("../../".$gallery['image']);
 header("location: ".ADMIN_URL."galleries?msg=Xóa ảnh thành công!")
 ?>

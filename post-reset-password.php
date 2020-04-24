@@ -36,8 +36,6 @@ $updateUser = "update users set
                             where 
                             email = '$email'";
 queryExecute($updateUser,false);
-$deleteForgot = "delete from forgot_password where email='$email'";
-queryExecute($deleteForgot,false);
 header('location: '.BASE_URL."login.php?msg=Bạn đã thay đổi mật khẩu thành công");
 die;
 ?>

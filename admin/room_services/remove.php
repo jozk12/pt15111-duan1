@@ -13,5 +13,6 @@ if(!$service){
 }
 $removeService = "delete from room_services where id = $id";
 queryExecute($removeService, false);
+unlink("../../".$service['icon']);
 header("location: ".ADMIN_URL."room_services?msg=Xóa Dịch vụ thành công!")
 ?>

@@ -9,15 +9,24 @@ $children = isset($_GET['children']) ? $_GET['children'] : "";
 $getWebSettingQuery = "select * from web_settings where status = 1";
 $webSetting = queryExecute($getWebSettingQuery, false);
 
+$total_room_one_page = 4;
+if(isset($_GET['page'])){
+    $page = $_GET['page'];
+}else{
+    $page = 1;
+}
+$offset = ($page-1)*$total_room_one_page;
 $getRoomQuery = "select r.* from room_types r";
 if ($adults !== "" && $children !== "") {
     $getRoomQuery .= " where (r.adults like'%$adults%'
-                                    or r.children like '%$children%') ORDER BY r.id DESC";
+                                    or r.children like '%$children%') 
+                                    ORDER BY r.id DESC";
 } else {
-    $getRoomQuery .= " where status = 1 ORDER BY r.id DESC";
+    $getRoomQuery .= " where status = 1 
+                        ORDER BY r.id DESC
+                        LIMIT $offset, $total_room_one_page";
 }
 $rooms = queryExecute($getRoomQuery, true);
-
 for ($i = 0; $i < count($rooms); $i++) {
     $getServiceQuery = "select s.id, 
                         s.name
@@ -28,7 +37,10 @@ for ($i = 0; $i < count($rooms); $i++) {
     $services = queryExecute($getServiceQuery, true);
     $rooms[$i]['room_sv'] = $services;
 }
-
+$getAllRoom = "select * from room_types";
+$allRoom = queryExecute($getAllRoom, true);
+$total_room = count($allRoom);
+$total_page = ceil($total_room/$total_room_one_page)
 ?>
 
 <!DOCTYPE html>
@@ -83,14 +95,22 @@ for ($i = 0; $i < count($rooms); $i++) {
                 </div>
                 <!-- Rooms List End -->
                 <!-- Pager -->
-                <!-- <div class="widget-pager">
-                        <ul>
-                            <li><a href="#">1</a></li>
-                            <li class="active"><a href="#">2</a></li>
-                            <li><a href="#">3</a></li>
-                            <li><a href="#">4</a></li>
-                        </ul>
-                    </div> -->
+                <div class="widget-pager">
+                    <ul <?php if ($adults!=""&&$children!=""):?>
+                            style="display: none;"
+                        <?php endif;?>>
+                        <?php
+                        for ($i=1; $i<=$total_page; $i++){
+                            ?>
+                            <li<?php if($page==$i):?>
+                                class="active"
+                            <?php endif;?>><a href="<?= BASE_URL.'rooms.php?checkin='."$checkin".'&&checkout='."$checkout".'&&adutls='."$adults".'&&children='."$children".'&&page='."$i"?>"><?=$i?></a>
+                            </li>
+                            <?php
+                        }
+                        ?>
+                    </ul>
+                </div>
                 <!-- Pager End -->
             </div>
         </div>
